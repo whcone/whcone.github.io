@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Hc&#39;s Cabin</title>
+    <link>http://whc.one/categories/linux/</link>
+    <description>Recent content in Linux on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 11 May 2019 08:57:52 +0800</lastBuildDate><atom:link href="http://whc.one/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>两次调用 fork 来防止僵尸进程</title>
+      <link>http://whc.one/posts/linux/fork-twice-to-prevent-zombie-proc/</link>
+      <pubDate>Sat, 11 May 2019 08:57:52 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/linux/fork-twice-to-prevent-zombie-proc/</guid>
+      <description>一个子进程终止之后，内核都会为其保存一些信息在进程表中，需要其父进程调用 wait 系列的系统调用来获取这些信息和清理这些空间。 如果一个子进程先于它的</description>
+    </item>
+    
+    <item>
+      <title>对 Linux 中的硬链接和软链接的理解</title>
+      <link>http://whc.one/posts/linux/insight-hard-link-and-soft-link/</link>
+      <pubDate>Wed, 13 Mar 2019 23:19:19 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/linux/insight-hard-link-and-soft-link/</guid>
+      <description>EXT2/EXT3 等文件系统的分区格式Linux 的文件系统从 EXT2 开始将文件的属性和文件的实际内容分开存储，文件的属性由 inode 存储，文件的内容由 block 存储。 系统在对磁盘</description>
+    </item>
+    
+  </channel>
+</rss>

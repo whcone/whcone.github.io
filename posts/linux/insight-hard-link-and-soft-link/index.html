@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+    
+  <title>对 Linux 中的硬链接和软链接的理解 | Hc&#39;s Cabin</title>
+  <meta name="author" content="Hc">
+  <meta name="description" content="EXT2/EXT3 等文件系统的分区格式Linux 的文件系统从 EXT2 开始将文件的属性和文件的实际内容分开存储，文件的属性由 inode 存储，文件的内容由 block 存储。 系统在对磁盘">
+  <meta name="keywords" content="blog,developer,personal">
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对 Linux 中的硬链接和软链接的理解"/>
+<meta name="twitter:description" content="EXT2/EXT3 等文件系统的分区格式Linux 的文件系统从 EXT2 开始将文件的属性和文件的实际内容分开存储，文件的属性由 inode 存储，文件的内容由 block 存储。 系统在对磁盘"/>
+
+  <meta property="og:title" content="对 Linux 中的硬链接和软链接的理解" />
+<meta property="og:description" content="EXT2/EXT3 等文件系统的分区格式Linux 的文件系统从 EXT2 开始将文件的属性和文件的实际内容分开存储，文件的属性由 inode 存储，文件的内容由 block 存储。 系统在对磁盘" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://whc.one/posts/linux/insight-hard-link-and-soft-link/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-03-13T23:19:19+08:00" />
+<meta property="article:modified_time" content="2019-03-13T23:19:19+08:00" />
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css"  crossorigin="anonymous">
+  
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/sass/main.css">
+
+  <link rel="stylesheet" href="/zoomjs/zoom.min.css">
+
+  <script src=/js/lazysizes.min.js></script>
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  
+
+</head>
+
+
+
+<body ontouchstart="">
+  
+  
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+  <div class="container-fluid">
+    
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://whc.one/">Hc&#39;s Cabin</a>
+    </div>
+    
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li><a href="/" title="Home">Home</a></li>
+          
+          <li><a href="/posts/" title="Archive">Archive</a></li>
+          
+          <li><a href="/about/" title="About">About</a></li>
+          
+
+          <li class="search-icon">
+            <a href="javascript:void(0)">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </div>
+  
+</nav>
+<script>
+  
+  
+  
+  var $body = document.body;
+  var $toggle = document.querySelector(".navbar-toggle");
+  var $navbar = document.querySelector("#huxblog_navbar");
+  var $collapse = document.querySelector(".navbar-collapse");
+
+  var __HuxNav__ = {
+    close: function () {
+      $navbar.className = " ";
+      
+      setTimeout(function () {
+        
+        if ($navbar.className.indexOf("in") < 0) {
+          $collapse.style.height = "0px";
+        }
+      }, 400);
+    },
+    open: function () {
+      $collapse.style.height = "auto";
+      $navbar.className += " in";
+    },
+  };
+
+  
+  $toggle.addEventListener("click", function (e) {
+    if ($navbar.className.indexOf("in") > 0) {
+      __HuxNav__.close();
+    } else {
+      __HuxNav__.open();
+    }
+  });
+
+  
+
+  document.addEventListener("click", function (e) {
+    if (e.target == $toggle) return;
+    if (e.target.className == "icon-bar") return;
+    __HuxNav__.close();
+  });
+</script>
+  
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  
+
+
+<style type="text/css">
+  header.intro-header {
+    position: relative;
+    background-image: url('');
+  }
+</style>
+
+<header class="intro-header style-text">
+
+  <div class="header-mask"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <div class="tags">
+            
+          </div>
+          <h1>对 Linux 中的硬链接和软链接的理解</h1>
+          <h2 class="subheading"></h2>
+          <span class="meta">
+            Posted by  Hc 
+            on Wed, Mar 13, 2019
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  
+
+
+<article>
+  <div class="container">
+    <div class="row">
+
+      
+      <div class="
+              col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              post-container">
+        <h2 id="ext2ext3-等文件系统的分区格式">EXT2/EXT3 等文件系统的分区格式<a class="anchorjs-link" href="#ext2ext3-%e7%ad%89%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%88%86%e5%8c%ba%e6%a0%bc%e5%bc%8f"></a></h2><p>Linux 的文件系统从 EXT2 开始将文件的属性和文件的实际内容分开存储，文件的属性由 inode 存储，文件的内容由 block 存储。</p>
+<p>系统在对磁盘进行分区格式化的时候，分区被以block大小为单位分割成多个块，block的大小可以为1KB、2KB或4KB；分区里的各个块被统一编号，然后被划分成各个区域，下图描述了一个分区的划分情况：
+<figure>
+  <a class="paragraph-image">
+    <img data-src="disk_partition.png" data-action="zoom" alt="disk_partition"  class="lazyload">
+  </a>
+  
+</figure>
+各区域解释：</p>
+<p><strong>Boot Sector</strong>：启动扇区，利用这个多个分区的启动扇区可以实现多系统。</p>
+<p><strong>Block Group</strong>：区块群组，由于文件系统可能很大，达到上百GB，将所有的 inode 和 block 放在一起管理是不明智的；因此 ext2/ext3 等文件系统将分区内的 inode 和block分成多个区块群组（Block Group)，分开管理；区块群组内包含Super Block、Partition Description、Block Bitmap、Inode BitMap、Inode Table、Data Block；其中Super Block在第一个区块群组内一定存在，在后续的区块群组内则可能存在也可能不存在，如果存在，则是作为第一个区块群组内的Super Block的备份。</p>
+<p><strong>Filesystem Description</strong>：分区文件系统的描述区块，用于描述各个 Block Group 开始与结束的 block 块号，以及描述每个 Block Group 内各个区段的开始与结束的block块号。</p>
+<p><strong>Block BitMap</strong>：block位图，用于判断 Data Block 内哪些 Block 已经被使用，哪些 Block 处于空闲状态可以使用。</p>
+<p><strong>Inode BitMap</strong>：inode位图，用于判断 Inode Table 内哪些 inode 已经被使用，哪些 inode 处于空闲状态可以使用。</p>
+<p><strong>Inode Table</strong>：inode表，用于存放 inode，inode 是一个数据结构，其中存储了目录或文件的各种属性以及 block 块号；各个 inode 也被统一编号。</p>
+<p><strong>Data Block</strong>：用于保存文件以及目录实际内容的 block 所在的区域。</p>
+<h2 id="ext2ext3等文件系统中目录与文件的存储">EXT2/EXT3等文件系统中目录与文件的存储<a class="anchorjs-link" href="#ext2ext3%e7%ad%89%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e4%b8%ad%e7%9b%ae%e5%bd%95%e4%b8%8e%e6%96%87%e4%bb%b6%e7%9a%84%e5%ad%98%e5%82%a8"></a></h2><p>在 ext2/ext3 等文件系统中，目录的存储和文件的存储形式差别不大：每一个目录和文件都对应一个 inode，每个 inode 都指向一个或多个 block；目录的 inode 指向的 block 内存储的是目录下的子目录名或文件名与相应的 inode 的对应关系，如图2中2号和65531号等 inode；文件的 inode 指向的 block 存储文件的实际内容，如图2中787883号和788042号等 inode。</p>
+<p>下图是根据一个实际的 Linux 系统作出的一个示意图，图中的淡绿色区域代表图1中的 Inode Table 区域，淡蓝色区域代表图1中的 Data Block 区域，图中块的大小和块的数量不代表实际情况。这个文件系统挂载到了“/”目录上，一般一个文件系统最顶层的 inode 编号为2，这里2号 inode 指向的 block 区域中存储了“/”目录下的子目录名以及文件名和它们对应的 inode 编号，其中的“vmlinuz.old”是一个软链接文件，它对应的 inode 指向的 block 存储了所链接的文件的相对的路径。
+<figure>
+  <a class="paragraph-image">
+    <img data-src="inode_and_block.png" data-action="zoom" alt="inode_and_block"  class="lazyload">
+  </a>
+  
+</figure></p>
+<h2 id="软链接与硬链接">软链接与硬链接<a class="anchorjs-link" href="#%e8%bd%af%e9%93%be%e6%8e%a5%e4%b8%8e%e7%a1%ac%e9%93%be%e6%8e%a5"></a></h2><p>如上所述，每个目录或文件都对应一个 inode，但是它们对应的 Inode 也有可能为同一个 inode；在同一个文件系统中，如果两个或多个文件的 Inode 相同，则可以称它们互为彼此的“硬链接”。</p>
+<p>硬链接是某个目录的 inode 指向的 block 区域中的一条记录，这个记录的 inode 部分的值与相同文件系统内的某个目录下的一条或多条记录的 inode 部分的值相同。因而，创建一个硬链接就是在某个表中增加一条记录，不会消耗 inode，一般也不会消耗 block 的数量，除非当前存储记录的 block 满了，重新找一块 block 来记录这条记录。</p>
+<p>对于硬链接有两个地方值得注意：</p>
+<ol>
+<li>硬链接不能跨文件系统：一般情况下，Linux 系统不能区分来自不同文件系统的相同的 Inode 编号，一个文件的 Inode 号码只能是自己所在的文件系统内的 Inode 的编号。例外的情况是挂载点的 Inode，当一个文件系统挂载到某个挂载点时，系统会屏蔽其原有的 Inode，然后记录这个挂载点和文件系统的对应关系，当使用到这个挂载点时，系统能根据记录找到正确的文件系统。</li>
+<li>不能创建目录的硬链接：从图2中看，在某一个目录的 Block 块中增加一条记录，该记录的 Inode 编号为某个目录的 Inode 编号是可行的，但是这样有可能在文件树中形成环，导致很多依赖遍历文件树的程序无限循环下去，因此目前为止，不能创建目录的硬链接。</li>
+</ol>
+<p>图2中，“/home/”目录下的 .bashrc 文件和 hard_bashrc 文件指向同一个 Inode：788041，hard_bashrc 是在“/home”目录下通过命令：”ln .bashrc hard_bashrc“建立的。</p>
+<p>软链接是一个新的文件，该文件中记录了一个文件或目录的路径。如果查看软链接文件的大小，会发现为它记录的路径字符串的大小。创建一个软链接会生成一个新的文件，因此会消耗 inode 和 block 的数量。</p>
+<p>软链接文件会被标记为“链接文件”，程序使用它时，会根据它记录的路径去找到真正的文件；因此既可以创建目录的软链接也可以跨文件系统创建软链接。</p>
+<p>上图中“/home/“目录下的”soft_bin“文件为“/bin”这个目录的软链接，这个文件是在“/home/”目录下通过命令：“ln -s /bin ./soft_bin&quot;创建的。</p>
+
+
+        <hr style="visibility: hidden;" />
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/posts/tools/about-gitingore/" data-toggle="tooltip" data-placement="top" title="关于 gitignore">
+              Previous<br>
+              <span>关于 gitignore</span>
+            </a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/posts/linux/fork-twice-to-prevent-zombie-proc/" data-toggle="tooltip" data-placement="top" title="两次调用 fork 来防止僵尸进程">
+              Next<br>
+              <span>两次调用 fork 来防止僵尸进程</span>
+            </a>
+          </li>
+          
+        </ul>
+        <hr style="visibility: hidden;" />
+
+        
+        
+
+
+
+
+
+
+      </div>
+
+      
+      
+      
+      <div class="
+              col-lg-2 col-lg-offset-0
+              visible-lg-block
+              sidebar-container
+              catalog-container">
+        <div class="side-catalog">
+          <hr class="hidden-sm hidden-xs">
+          <h5>
+            <a class="catalog-toggle" href="#">CATALOG</a>
+          </h5>
+          <ul class="catalog-body"></ul>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</article>
+
+
+
+  
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Copyright &copy; Hc&#39;s Cabin 2023
+          <br>
+          Powered by <a href="https://gohugo.io">Hugo</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src=/js/jquery.min.js></script>
+<script src=/js/bootstrap.min.js crossorigin="anonymous"></script>
+
+
+
+<script src="/js/hux-blog.min.c4ea77041cd3edbfc8b2622cd887a9a5d8760a4162d14489e36d2a3fa4c90172.js"></script>
+
+
+<script src=/js/simple-jekyll-search.min.js></script>
+
+
+<script src="/js/search.min.53bce5da475b4d362500e5ce5dddfa22e20e1b9018777411d2020b4b839c9310.js"></script>
+
+
+
+
+
+
+<script type="text/javascript">
+  function generateCatalog(selector) {
+    _containerSelector = 'div.post-container'
+    
+    var P = $(_containerSelector), a, n, t, l, i, c;
+    a = P.find('h1,h2,h3,h4');
+    
+    $(selector).html('')
+    
+    a.each(function () {
+      n = $(this).prop('tagName').toLowerCase();
+      i = "#" + $(this).prop('id');
+      t = $(this).text();
+      c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+      l = $('<li class="' + n + '_nav"></li>').append(c);
+      $(selector).append(l);
+    });
+    return true;
+  }
+
+  generateCatalog(".catalog-body");
+
+  
+  $(".catalog-toggle").click((function (e) {
+    e.preventDefault();
+    $('.side-catalog').toggleClass("fold")
+  }))
+</script>
+
+
+<script type="text/javascript" src='/js/jquery.nav.min.ade6bde8f9fcc6a4b40852cb892e9f5912340ab8fe1305149d917fdd16fffd8d.js'></script>
+<script>
+   $(document).ready( function () {
+    $('.catalog-body').onePageNav({
+      currentClass: "active",
+      changeHash: !1,
+      easing: "swing",
+      filter: "",
+      scrollSpeed: 700,
+      scrollOffset: 0,
+      scrollThreshold: .2,
+      begin: null,
+      end: null,
+      scrollChange: null,
+      padding: 80
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+<script src="/zoomjs/zoom.min.js"></script>
+
+</body>
+
+</html>

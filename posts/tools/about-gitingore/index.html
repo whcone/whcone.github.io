@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+    
+  <title>关于 gitignore | Hc&#39;s Cabin</title>
+  <meta name="author" content="Hc">
+  <meta name="description" content="前言通过在一个 gitignore 文件里面添加相关的规则，我们可以让 git 在追踪文件时忽略一些特定的文件（gitignore 文件泛指所有存放忽略规则的文件，不仅仅">
+  <meta name="keywords" content="blog,developer,personal">
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="关于 gitignore"/>
+<meta name="twitter:description" content="前言通过在一个 gitignore 文件里面添加相关的规则，我们可以让 git 在追踪文件时忽略一些特定的文件（gitignore 文件泛指所有存放忽略规则的文件，不仅仅"/>
+
+  <meta property="og:title" content="关于 gitignore" />
+<meta property="og:description" content="前言通过在一个 gitignore 文件里面添加相关的规则，我们可以让 git 在追踪文件时忽略一些特定的文件（gitignore 文件泛指所有存放忽略规则的文件，不仅仅" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://whc.one/posts/tools/about-gitingore/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-03-13T09:44:47+08:00" />
+<meta property="article:modified_time" content="2019-03-13T09:44:47+08:00" />
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css"  crossorigin="anonymous">
+  
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/sass/main.css">
+
+  <link rel="stylesheet" href="/zoomjs/zoom.min.css">
+
+  <script src=/js/lazysizes.min.js></script>
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  
+
+</head>
+
+
+
+<body ontouchstart="">
+  
+  
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+  <div class="container-fluid">
+    
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://whc.one/">Hc&#39;s Cabin</a>
+    </div>
+    
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li><a href="/" title="Home">Home</a></li>
+          
+          <li><a href="/posts/" title="Archive">Archive</a></li>
+          
+          <li><a href="/about/" title="About">About</a></li>
+          
+
+          <li class="search-icon">
+            <a href="javascript:void(0)">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </div>
+  
+</nav>
+<script>
+  
+  
+  
+  var $body = document.body;
+  var $toggle = document.querySelector(".navbar-toggle");
+  var $navbar = document.querySelector("#huxblog_navbar");
+  var $collapse = document.querySelector(".navbar-collapse");
+
+  var __HuxNav__ = {
+    close: function () {
+      $navbar.className = " ";
+      
+      setTimeout(function () {
+        
+        if ($navbar.className.indexOf("in") < 0) {
+          $collapse.style.height = "0px";
+        }
+      }, 400);
+    },
+    open: function () {
+      $collapse.style.height = "auto";
+      $navbar.className += " in";
+    },
+  };
+
+  
+  $toggle.addEventListener("click", function (e) {
+    if ($navbar.className.indexOf("in") > 0) {
+      __HuxNav__.close();
+    } else {
+      __HuxNav__.open();
+    }
+  });
+
+  
+
+  document.addEventListener("click", function (e) {
+    if (e.target == $toggle) return;
+    if (e.target.className == "icon-bar") return;
+    __HuxNav__.close();
+  });
+</script>
+  
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  
+
+
+<style type="text/css">
+  header.intro-header {
+    position: relative;
+    background-image: url('');
+  }
+</style>
+
+<header class="intro-header style-text">
+
+  <div class="header-mask"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <div class="tags">
+            
+            <a class="tag" href="/tags/git/" title="git">git</a>
+            
+          </div>
+          <h1>关于 gitignore</h1>
+          <h2 class="subheading"></h2>
+          <span class="meta">
+            Posted by  Hc 
+            on Wed, Mar 13, 2019
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  
+
+
+<article>
+  <div class="container">
+    <div class="row">
+
+      
+      <div class="
+              col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              post-container">
+        <h2 id="前言">前言<a class="anchorjs-link" href="#%e5%89%8d%e8%a8%80"></a></h2><p>通过在一个 <em>gitignore</em> 文件里面添加相关的规则，我们可以让 git 在追踪文件时忽略一些特定的文件（<em>gitignore</em> 文件泛指所有存放忽略规则的文件，不仅仅是指 .gitignore 这个文件)。</p>
+<p><strong>注意：</strong> <em>如果一个文件当前已经被 git 追踪，则针对它添加的任何忽略规则都将不会起作用；如果确实要取消对它的追踪，在添加相应的忽略规则之后，还应该使用<code>git rm --cached fileName</code> 或 <code>git rm -r --cached dirName</code> 来移除对此文件或目录的追踪</em></p>
+<p>在下文中我们用 <code>$GIT_DIR</code> 代表 git 管理的仓库的顶层目录。</p>
+<h2 id="gitignore-文件存放的位置"><em>gitignore</em> 文件存放的位置<a class="anchorjs-link" href="#gitignore-%e6%96%87%e4%bb%b6%e5%ad%98%e6%94%be%e7%9a%84%e4%bd%8d%e7%bd%ae"></a></h2><p><em>gitignore</em> 文件里面的每一行规定一个规则来忽略相应的文件，当 git 决定是否忽略某个文件时，它会参考多个来源的 <em>gitignore</em> 规则，下面以 git 访问的的顺序列出这些来源：</p>
+<ul>
+<li>
+<p>来自命令行的规则，有些 git 命令（<code>git ls-files</code>， <code>git read-tree</code>等）支持从命令行通过参数输入规则</p>
+</li>
+<li>
+<p>来自文件所在目录下 .gitignore 文件里面的规则，或者是文件所在目录的上层目录（逐层往上，直到仓库顶层目录）下的 .gitignore 文件（子目录下的 .gitignore 文件中的规则可以覆盖其上层目录下的 .gitignore 文件里面的规则）</p>
+</li>
+<li>
+<p>来自 <code>$GIT_DIR/info/exclude</code> 文件里面的规则</p>
+</li>
+<li>
+<p>来自全局的 <em>gitignore</em> 文件里面的规则，这个文件由 git 的配置文件（一般是 ~/.gitconfig）里面的 core.excludeFile 这一项指定，如果 git 配置文件里面没有这一项，则默认值为 <code>$XDG_CONFIG_HOME/git/ignore</code>，但是如果 <code>XDG_CONFIG</code> 这个环境变量没有配置或者是空的，则默认值为 <code>$HOME/.config/git/ignore</code></p>
+</li>
+</ul>
+<h2 id="忽略规则的存放原则和相应的起始目录">忽略规则的存放原则和相应的起始目录<a class="anchorjs-link" href="#%e5%bf%bd%e7%95%a5%e8%a7%84%e5%88%99%e7%9a%84%e5%ad%98%e6%94%be%e5%8e%9f%e5%88%99%e5%92%8c%e7%9b%b8%e5%ba%94%e7%9a%84%e8%b5%b7%e5%a7%8b%e7%9b%ae%e5%bd%95"></a></h2><h3 id="存放原则">存放原则<a class="anchorjs-link" href="#%e5%ad%98%e6%94%be%e5%8e%9f%e5%88%99"></a></h3><p>正如上面所讲的，git 会参考来自多个文件的忽略规则去决定是否忽略一个文件，因此我们在添加一条忽略规则时，应该遵循以下的原则：</p>
+<ul>
+<li>
+<p>如果忽略规则是需要和工程一起发布到远程仓库的，则应该把这些规则放在工程里面的 .gitignore 文件中</p>
+</li>
+<li>
+<p>如果忽略规则不需要和工程一起发布到远程仓库，但这些规则又只是针对当前这个工程，不是全局性的，则这些规则就应该放在 <code>$GIT_DIR/info/exclude</code> 这个文件里面</p>
+</li>
+<li>
+<p>如果忽略规则是全局性的，则应该将其放入全局的 <em>gitignore</em> 文件里面</p>
+</li>
+</ul>
+<h3 id="起始目录">起始目录<a class="anchorjs-link" href="#%e8%b5%b7%e5%a7%8b%e7%9b%ae%e5%bd%95"></a></h3><p>忽略规则根据其所在的文件会有一定的作用范围，这个范围包括一个起始目录和及其下面的所有文件，不同文件的起始目录为：</p>
+<ul>
+<li>
+<p>.gitignore 文件的起始目录是其所在的目录</p>
+</li>
+<li>
+<p>其它文件里面的起始目录是仓库的顶层目录</p>
+</li>
+</ul>
+<h2 id="忽略规则的格式">忽略规则的格式<a class="anchorjs-link" href="#%e5%bf%bd%e7%95%a5%e8%a7%84%e5%88%99%e7%9a%84%e6%a0%bc%e5%bc%8f"></a></h2><p><em>gitignore</em> 文件里的每一行都规定一条规则，git 对文件里面的规则进行自上到下的匹配。下面是各种规则的格式：</p>
+<ul>
+<li>
+<p>空行不匹配任何文件，只是使得文件更容易阅读</p>
+</li>
+<li>
+<p>以 <code>#</code> 开始的行是注释，如果规则里面需要用 <code>#</code>，请使用反斜杠 <code>\</code> 转义，注释只能以 <code>#</code> 开头并且独占一行</p>
+</li>
+<li>
+<p>每一行后面的空格都会被忽略，除非空格前面用反斜杠 <code>\</code> 进行转义</p>
+</li>
+<li>
+<p>以 <code>!</code> 开头的规则用来取消对这条规则前面某些规则对某些文件的忽略，例如前面忽略了某个文件夹下所有的文件，再利用 <code>!</code> 写一条规则取消对该文件夹下面某个文件的忽略，如果想输入普通的 <code>!</code>，请使用反斜杠 <code>\</code> 转义。
+<strong>注意：</strong> <em>如果前面的规则将某个目录忽略了，则对这个目录下面所有的文件使用 <code>!</code> 规则将不起作用，具体请看例2</em></p>
+</li>
+<li>
+<p>如果一条规则以斜杠 <code>/</code> 结尾，git 首先会将 <code>/</code> 去掉再进行匹配，但是这个反斜杠也会其作用，代表这个规则最后匹配的是文件夹，例如 <code>build/</code> 这条规则最后会以<code>build</code> 这个规则去匹配名为 build 的文件夹，但是不会匹配一个名为 build 的文件（以及软链接）</p>
+</li>
+<li>
+<p>如果一条规则不包含斜杠 <code>/</code>（包括那些仅在末尾包含斜杠的规则，因为 git 会首先去掉规则末尾的斜杠），则这条规则会在相应的 <em>起始目录</em> 下的所有层次的文件夹里面进行匹配</p>
+</li>
+<li>
+<p>如果一条规则包含斜杠 <code>/</code>（指去掉末尾的斜杠之后还包含斜杠），则这条规则只会在相应的 <em>起始目录</em> 里面（不包括子目录）进行匹配；如果规则以斜杠开头，表示相对 <em>起始目录</em>，而不是系统的根目录</p>
+</li>
+<li>
+<p>与 shell 下面的通配符一样，忽略规则里面可以用 <code>*</code> 匹配任意的字符串（不包括包含斜杠的字符串），用 <code>?</code> 匹配任意一个字符（除了斜杠），用 <code>[]</code> 中列出的字符范围匹配其中的一个字符串</p>
+</li>
+<li>
+<p>两个连续的星型标号 <code>**</code> 有其特殊的含义，但是它的表现依赖于 git 运行的平台。总的来说，<code>**</code> 匹配任意的<em>路径字符串</em> （也就是说可以包含斜杠 <code>/</code> 的字符串），因此与单个星型标号 <code>*</code> 只匹配目录下的单个文件和文件夹不同，<code>**</code> 会匹配任意深度的文件和文件夹</p>
+</li>
+</ul>
+<h2 id="例子">例子<a class="anchorjs-link" href="#%e4%be%8b%e5%ad%90"></a></h2><p>下面所有例子中列举的忽略规则都位于仓库顶层目录下的 .gitignore 文件里面</p>
+<h3 id="1-忽略仓库里面所有以-a-结尾的文件但保留keepa这个文件">1. 忽略仓库里面所有以 <code>.a</code> 结尾的文件，但保留<code>keep.a</code>这个文件<a class="anchorjs-link" href="#1-%e5%bf%bd%e7%95%a5%e4%bb%93%e5%ba%93%e9%87%8c%e9%9d%a2%e6%89%80%e6%9c%89%e4%bb%a5-a-%e7%bb%93%e5%b0%be%e7%9a%84%e6%96%87%e4%bb%b6%e4%bd%86%e4%bf%9d%e7%95%99keepa%e8%bf%99%e4%b8%aa%e6%96%87%e4%bb%b6"></a></h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 忽略所有以 .a 结尾的文件</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>*.a
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4"># 保留 keep.a 这个文件</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>!keep.a
+</span></span></code></pre></div><h3 id="2-忽略-release-文件夹但是保留它下面的-app-latestapk-这个文件">2. 忽略 release 文件夹，但是保留它下面的 app-latest.apk 这个文件<a class="anchorjs-link" href="#2-%e5%bf%bd%e7%95%a5-release-%e6%96%87%e4%bb%b6%e5%a4%b9%e4%bd%86%e6%98%af%e4%bf%9d%e7%95%99%e5%ae%83%e4%b8%8b%e9%9d%a2%e7%9a%84-app-latestapk-%e8%bf%99%e4%b8%aa%e6%96%87%e4%bb%b6"></a></h3><p>下面的忽略规则将不能正常工作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 忽略 release 这个文件夹，也可以写成 release，但是有可能匹配到名为 release 的文件或者软链接</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>release/
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4"># 取消对 release/app-latest.apk 这个文件的忽略，这条规则将不会起作用，因为前面一条规则已经将 release 这个文件夹忽略了</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>!release/app-latest.apk
+</span></span></code></pre></div><p>正确的写法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 忽略 release 文件夹下面的所有文件和文件夹（但是没有忽略 release 自身这个文件夹）</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>release/*
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>!release/app-latest.apk
+</span></span></code></pre></div><h3 id="3-忽略仓库顶层目录里面的-packagesbuild-这个文件夹">3. 忽略仓库顶层目录里面的 <code>packages/build</code> 这个文件夹<a class="anchorjs-link" href="#3-%e5%bf%bd%e7%95%a5%e4%bb%93%e5%ba%93%e9%a1%b6%e5%b1%82%e7%9b%ae%e5%bd%95%e9%87%8c%e9%9d%a2%e7%9a%84-packagesbuild-%e8%bf%99%e4%b8%aa%e6%96%87%e4%bb%b6%e5%a4%b9"></a></h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 由于规则里面包含斜杠（即使去掉末尾的斜杠之后），因此只会在起始目录里面进行匹配，不会去子目录里面匹配</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#6272a4"># 也可以写成 packages/build 和 /packages/build/ 以及 /packages/build</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>packages/build/
+</span></span></code></pre></div><h3 id="4-忽略仓库里面所有的-packagesbuild-文件夹">4. 忽略仓库里面所有的 <code>packages/build/</code> 文件夹<a class="anchorjs-link" href="#4-%e5%bf%bd%e7%95%a5%e4%bb%93%e5%ba%93%e9%87%8c%e9%9d%a2%e6%89%80%e6%9c%89%e7%9a%84-packagesbuild-%e6%96%87%e4%bb%b6%e5%a4%b9"></a></h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># ** 会匹配任意的路径字符串，因此 packages/build，temp/packages/build 都会被匹配到</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>**/packages/build/
+</span></span></code></pre></div><h3 id="5--与--的区别">5. <code>*</code> 与 <code>**</code> 的区别<a class="anchorjs-link" href="#5--%e4%b8%8e--%e7%9a%84%e5%8c%ba%e5%88%ab"></a></h3><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 匹配 /a/b/z，/a/c/z，/a/d/z 等</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>/a/*/z
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4"># 匹配 /a/b/z，/a/b/c/z，/a/b/c/d/z 等</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>/a/**/z
+</span></span></code></pre></div><h2 id="参考">参考<a class="anchorjs-link" href="#%e5%8f%82%e8%80%83"></a></h2><ol>
+<li>
+<p><a href="https://git-scm.com/docs/gitignore" target="_blank">https://git-scm.com/docs/gitignore</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/681262/difference-in-the-paths-in-gitignore-file" target="_blank">https://stackoverflow.com/questions/681262/difference-in-the-paths-in-gitignore-file</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/41761128/are-leading-asterisks-redundant-in-gitignore-path-matching-syntax" target="_blank">https://stackoverflow.com/questions/41761128/are-leading-asterisks-redundant-in-gitignore-path-matching-syntax</a></p>
+</li>
+</ol>
+
+
+        <hr style="visibility: hidden;" />
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/posts/tools/manage-multi-git-account/" data-toggle="tooltip" data-placement="top" title="正确地在一台机器上使用多个 git 账户">
+              Previous<br>
+              <span>正确地在一台机器上使用多个 git 账户</span>
+            </a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/posts/linux/insight-hard-link-and-soft-link/" data-toggle="tooltip" data-placement="top" title="对 Linux 中的硬链接和软链接的理解">
+              Next<br>
+              <span>对 Linux 中的硬链接和软链接的理解</span>
+            </a>
+          </li>
+          
+        </ul>
+        <hr style="visibility: hidden;" />
+
+        
+        
+
+
+
+
+
+
+      </div>
+
+      
+      
+      
+      <div class="
+              col-lg-2 col-lg-offset-0
+              visible-lg-block
+              sidebar-container
+              catalog-container">
+        <div class="side-catalog">
+          <hr class="hidden-sm hidden-xs">
+          <h5>
+            <a class="catalog-toggle" href="#">CATALOG</a>
+          </h5>
+          <ul class="catalog-body"></ul>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</article>
+
+
+
+  
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Copyright &copy; Hc&#39;s Cabin 2023
+          <br>
+          Powered by <a href="https://gohugo.io">Hugo</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src=/js/jquery.min.js></script>
+<script src=/js/bootstrap.min.js crossorigin="anonymous"></script>
+
+
+
+<script src="/js/hux-blog.min.c4ea77041cd3edbfc8b2622cd887a9a5d8760a4162d14489e36d2a3fa4c90172.js"></script>
+
+
+<script src=/js/simple-jekyll-search.min.js></script>
+
+
+<script src="/js/search.min.53bce5da475b4d362500e5ce5dddfa22e20e1b9018777411d2020b4b839c9310.js"></script>
+
+
+
+
+
+
+<script type="text/javascript">
+  function generateCatalog(selector) {
+    _containerSelector = 'div.post-container'
+    
+    var P = $(_containerSelector), a, n, t, l, i, c;
+    a = P.find('h1,h2,h3,h4');
+    
+    $(selector).html('')
+    
+    a.each(function () {
+      n = $(this).prop('tagName').toLowerCase();
+      i = "#" + $(this).prop('id');
+      t = $(this).text();
+      c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+      l = $('<li class="' + n + '_nav"></li>').append(c);
+      $(selector).append(l);
+    });
+    return true;
+  }
+
+  generateCatalog(".catalog-body");
+
+  
+  $(".catalog-toggle").click((function (e) {
+    e.preventDefault();
+    $('.side-catalog').toggleClass("fold")
+  }))
+</script>
+
+
+<script type="text/javascript" src='/js/jquery.nav.min.ade6bde8f9fcc6a4b40852cb892e9f5912340ab8fe1305149d917fdd16fffd8d.js'></script>
+<script>
+   $(document).ready( function () {
+    $('.catalog-body').onePageNav({
+      currentClass: "active",
+      changeHash: !1,
+      easing: "swing",
+      filter: "",
+      scrollSpeed: 700,
+      scrollOffset: 0,
+      scrollThreshold: .2,
+      begin: null,
+      end: null,
+      scrollChange: null,
+      padding: 80
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+<script src="/zoomjs/zoom.min.js"></script>
+
+</body>
+
+</html>

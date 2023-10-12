@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>其它 on Hc&#39;s Cabin</title>
+    <link>http://whc.one/categories/%E5%85%B6%E5%AE%83/</link>
+    <description>Recent content in 其它 on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 03 May 2022 18:49:11 +0800</lastBuildDate><atom:link href="http://whc.one/categories/%E5%85%B6%E5%AE%83/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>保留指定小数位数的四舍五入实现</title>
+      <link>http://whc.one/posts/misc/round-implementation/</link>
+      <pubDate>Tue, 03 May 2022 18:49:11 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/misc/round-implementation/</guid>
+      <description>实现保留浮点数前n位小数，同时进行四舍五入，遇到了一时半会儿想不到，记录供参考 1func Round(x float64, n int) float64 { 2 if n &amp;lt; 0 { 3 return x 4 } 5 6 w := math.Pow(10, float64(n)) 7 // return float64(int(x*w+0.5))/w 8 t :=</description>
+    </item>
+    
+    <item>
+      <title>域名的根记录如何设置为 CNAME</title>
+      <link>http://whc.one/posts/misc/cname-of-domain-root/</link>
+      <pubDate>Sun, 03 Apr 2022 12:00:47 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/misc/cname-of-domain-root/</guid>
+      <description>在托管服务流行的今天，建立一个简单的网站可能倾向于使用托管服务的 PaaS 服务； 托管方通常提供一个域名（例如 example.github.io）给我</description>
+    </item>
+    
+    <item>
+      <title>前缀表达式和后缀表达式</title>
+      <link>http://whc.one/posts/misc/polish-and-reverse-polish-notation/</link>
+      <pubDate>Tue, 23 Jun 2020 22:44:39 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/misc/polish-and-reverse-polish-notation/</guid>
+      <description>算数表达式有三种表现形式，前缀表达式（Polish Notation）、中缀表达式和后缀表达式（Reverse Polish Notation）； 它们的区别</description>
+    </item>
+    
+    <item>
+      <title>Verilog 实现一个简单的 MII 模块</title>
+      <link>http://whc.one/posts/misc/simple-mii/</link>
+      <pubDate>Wed, 06 Apr 2016 23:39:47 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/misc/simple-mii/</guid>
+      <description>项目中要求简单地测试一下基于FPGA的模拟平台的RJ45网口，也就是需要实现一个MII或者RMII模块。 于是在此记录一下实现一个简单的MII</description>
+    </item>
+    
+  </channel>
+</rss>

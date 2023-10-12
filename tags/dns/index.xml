@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DNS on Hc&#39;s Cabin</title>
+    <link>http://whc.one/tags/dns/</link>
+    <description>Recent content in DNS on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 03 Apr 2022 12:00:47 +0800</lastBuildDate><atom:link href="http://whc.one/tags/dns/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>域名的根记录如何设置为 CNAME</title>
+      <link>http://whc.one/posts/misc/cname-of-domain-root/</link>
+      <pubDate>Sun, 03 Apr 2022 12:00:47 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/misc/cname-of-domain-root/</guid>
+      <description>在托管服务流行的今天，建立一个简单的网站可能倾向于使用托管服务的 PaaS 服务； 托管方通常提供一个域名（例如 example.github.io）给我</description>
+    </item>
+    
+  </channel>
+</rss>

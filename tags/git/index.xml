@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>git on Hc&#39;s Cabin</title>
+    <link>http://whc.one/tags/git/</link>
+    <description>Recent content in git on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 13 Mar 2019 09:44:47 +0800</lastBuildDate><atom:link href="http://whc.one/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>关于 gitignore</title>
+      <link>http://whc.one/posts/tools/about-gitingore/</link>
+      <pubDate>Wed, 13 Mar 2019 09:44:47 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/tools/about-gitingore/</guid>
+      <description>前言通过在一个 gitignore 文件里面添加相关的规则，我们可以让 git 在追踪文件时忽略一些特定的文件（gitignore 文件泛指所有存放忽略规则的文件，不仅仅</description>
+    </item>
+    
+    <item>
+      <title>正确地在一台机器上使用多个 git 账户</title>
+      <link>http://whc.one/posts/tools/manage-multi-git-account/</link>
+      <pubDate>Sat, 13 Jan 2018 10:55:21 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/tools/manage-multi-git-account/</guid>
+      <description>如果一个用户在一台机器上需要同时使用多个 git 账户（同一个系统内），而且这些账户都有在 GitHub 之类的托管网站托管远程项目，为了 git 正常地运行，至少需要关</description>
+    </item>
+    
+  </channel>
+</rss>

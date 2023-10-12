@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编程 on Hc&#39;s Cabin</title>
+    <link>http://whc.one/categories/%E7%BC%96%E7%A8%8B/</link>
+    <description>Recent content in 编程 on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 26 Jun 2019 09:32:52 +0800</lastBuildDate><atom:link href="http://whc.one/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43; 里的 move 语法</title>
+      <link>http://whc.one/posts/programming/move-semantics-in-cpp/</link>
+      <pubDate>Wed, 26 Jun 2019 09:32:52 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/programming/move-semantics-in-cpp/</guid>
+      <description>move 语法是 C++ 语法引入的一种新的语法，主要成员设计动态分配的类，体现在其复制构造函数、赋值运算符里面。 为什么需要 move 语法？C++ 在运行过程中有可能</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; 中的 lvalue reference 和 rvalue reference</title>
+      <link>http://whc.one/posts/programming/lvalue-and-rvalue-reference-in-cpp/</link>
+      <pubDate>Wed, 26 Jun 2019 09:17:17 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/programming/lvalue-and-rvalue-reference-in-cpp/</guid>
+      <description>在 C++11 之后，传统的引用都是 lvalue reference，lvalue 是一个变量变量名或者 dereferenced pointer，它们在程序里都是可以获取到地址的。 形象地说，</description>
+    </item>
+    
+  </channel>
+</rss>

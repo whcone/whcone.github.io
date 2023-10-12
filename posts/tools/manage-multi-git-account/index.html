@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+    
+  <title>正确地在一台机器上使用多个 git 账户 | Hc&#39;s Cabin</title>
+  <meta name="author" content="Hc">
+  <meta name="description" content="如果一个用户在一台机器上需要同时使用多个 git 账户（同一个系统内），而且这些账户都有在 GitHub 之类的托管网站托管远程项目，为了 git 正常地运行，至少需要关">
+  <meta name="keywords" content="blog,developer,personal">
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="正确地在一台机器上使用多个 git 账户"/>
+<meta name="twitter:description" content="如果一个用户在一台机器上需要同时使用多个 git 账户（同一个系统内），而且这些账户都有在 GitHub 之类的托管网站托管远程项目，为了 git 正常地运行，至少需要关"/>
+
+  <meta property="og:title" content="正确地在一台机器上使用多个 git 账户" />
+<meta property="og:description" content="如果一个用户在一台机器上需要同时使用多个 git 账户（同一个系统内），而且这些账户都有在 GitHub 之类的托管网站托管远程项目，为了 git 正常地运行，至少需要关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://whc.one/posts/tools/manage-multi-git-account/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-01-13T10:55:21+08:00" />
+<meta property="article:modified_time" content="2018-01-13T10:55:21+08:00" />
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css"  crossorigin="anonymous">
+  
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="/sass/main.css">
+
+  <link rel="stylesheet" href="/zoomjs/zoom.min.css">
+
+  <script src=/js/lazysizes.min.js></script>
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  
+
+</head>
+
+
+
+<body ontouchstart="">
+  
+  
+  <nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+  <div class="container-fluid">
+    
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://whc.one/">Hc&#39;s Cabin</a>
+    </div>
+    
+    <div id="huxblog_navbar">
+      <div class="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li><a href="/" title="Home">Home</a></li>
+          
+          <li><a href="/posts/" title="Archive">Archive</a></li>
+          
+          <li><a href="/about/" title="About">About</a></li>
+          
+
+          <li class="search-icon">
+            <a href="javascript:void(0)">
+              <i class="fa fa-search"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </div>
+  
+</nav>
+<script>
+  
+  
+  
+  var $body = document.body;
+  var $toggle = document.querySelector(".navbar-toggle");
+  var $navbar = document.querySelector("#huxblog_navbar");
+  var $collapse = document.querySelector(".navbar-collapse");
+
+  var __HuxNav__ = {
+    close: function () {
+      $navbar.className = " ";
+      
+      setTimeout(function () {
+        
+        if ($navbar.className.indexOf("in") < 0) {
+          $collapse.style.height = "0px";
+        }
+      }, 400);
+    },
+    open: function () {
+      $collapse.style.height = "auto";
+      $navbar.className += " in";
+    },
+  };
+
+  
+  $toggle.addEventListener("click", function (e) {
+    if ($navbar.className.indexOf("in") > 0) {
+      __HuxNav__.close();
+    } else {
+      __HuxNav__.open();
+    }
+  });
+
+  
+
+  document.addEventListener("click", function (e) {
+    if (e.target == $toggle) return;
+    if (e.target.className == "icon-bar") return;
+    __HuxNav__.close();
+  });
+</script>
+  
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+  
+
+
+<style type="text/css">
+  header.intro-header {
+    position: relative;
+    background-image: url('');
+  }
+</style>
+
+<header class="intro-header style-text">
+
+  <div class="header-mask"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="post-heading">
+          <div class="tags">
+            
+            <a class="tag" href="/tags/git/" title="git">git</a>
+            
+          </div>
+          <h1>正确地在一台机器上使用多个 git 账户</h1>
+          <h2 class="subheading"></h2>
+          <span class="meta">
+            Posted by  Hc 
+            on Sat, Jan 13, 2018
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  
+
+
+<article>
+  <div class="container">
+    <div class="row">
+
+      
+      <div class="
+              col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              post-container">
+        <p>如果一个用户在一台机器上需要同时使用多个 git 账户（同一个系统内），而且这些账户都有在 GitHub 之类的托管网站托管远程项目，为了 git 正常地运行，至少需要关注如下两个方面：</p>
+<ul>
+<li>ssh-key</li>
+<li>user.email</li>
+</ul>
+<h2 id="ssh-key">ssh-key<a class="anchorjs-link" href="#ssh-key"></a></h2><ol>
+<li>
+<p>为每个账户生成 ssh-key：</p>
+<p>GitHub 等网站使用 ssh-key 来验证用户的远程连接，一般同一个网站的系统内不允许一个 ssh-key 重复使用，因此如果这两个 git 账户注册于同一个网站，则需要分别为它们在本地生成 ssh-key。</p>
+<p>假设现在有两个账户 A 和 B，首先我们在本地为它们各自生成 ssh-key:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>ssh-keygen -t rsa -f ~/.ssh/id_rsa_a -C <span style="color:#f1fa8c">&#34;a@example.com&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>ssh-keygen -t rsa -f ~/.ssh/id_rsa_b -C <span style="color:#f1fa8c">&#34;b@example.com&#34;</span>;
+</span></span></code></pre></div><p><em>（这里<code>a@example.com,b@example.com</code>是两个账户各自的邮箱）</em></p>
+<p>生成各自的 ssh-key 之后，登录各自的账号，把 ~/.ssh/id_rsa_a.pub 添加到账户 A 的 ssh-key 中，
+将 ~/.ssh/id_rsa_b.pub 添加到 B 的 ssh-key 中。</p>
+</li>
+<li>
+<p>配置 ssh 连接时使用的 ssh-key：</p>
+<p>在 ssh 连接的时候，不同的账户需要使用各自的私钥。我们在 <code>~/.ssh/config</code> 中进行配置，如果这个文件不存在，首先创建一个，然后在其中添加如下的内容：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Host github_a
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  HostName github.com
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  User git
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  IdentityFile ~/.ssh/id_rsa_a
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>Host github_b
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>  HostName github.com
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>  User git
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span>  IdentityFile ~/.ssh/id_rsa_b
+</span></span></code></pre></div><p>通过在这个文件中定义类似 <code>github_a</code> 和 <code>github_b</code>这样的 Host，我们可以在用 ssh 进行远程连接时方便地指定用户和其签名文件。因此，假设账户 A 和 账户 B 各自的远程仓库地址（SSH 格式）分别为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>  git@github.com:A/repo_a.git
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  git@github.com:B/repo_b.git
+</span></span></code></pre></div><p>我们现在在各自的本地仓库里面将各自的地址修改为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>  github_a:A/repo_a.git
+</span></span><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  github_b:B/repo_b.git
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="useremail">user.email<a class="anchorjs-link" href="#useremail"></a></h2><p>在正确配置 ssh-key 之后，还需要注意的一点是需要在本地 git 仓库里面正确地配置 user.email。</p>
+<p>git 在使用的时候都会有一个全局的 user.email，假设现在全局的 user.email 是账户 A 的电子邮件，如果在账户 B 的本地仓库里面不把本地的 user.email 配置成账户 B 的电子邮件，则在账户 B 的本地仓库里面提交（commit）的时候，提交信息中的电子邮件就会变为 A 的电子邮件，如果将这个提交推送到远程仓库（假设两个账户都是使用各自的电子邮件注册于 GitHub 等网站），则在 GitHub 的网页上的账户 B 的仓库里面，就会看到账户 A 给这个仓库进行了提交。</p>
+<p>因此，为了避免这种情形，需要在账户 B 的本地仓库里面运行：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>git config --local user.email <span style="color:#f1fa8c">&#34;B 的电子邮件&#34;</span>
+</span></span></code></pre></div>
+
+        <hr style="visibility: hidden;" />
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/posts/misc/simple-mii/" data-toggle="tooltip" data-placement="top" title="Verilog 实现一个简单的 MII 模块">
+              Previous<br>
+              <span>Verilog 实现一个简单的 MII 模块</span>
+            </a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/posts/tools/about-gitingore/" data-toggle="tooltip" data-placement="top" title="关于 gitignore">
+              Next<br>
+              <span>关于 gitignore</span>
+            </a>
+          </li>
+          
+        </ul>
+        <hr style="visibility: hidden;" />
+
+        
+        
+
+
+
+
+
+
+      </div>
+
+      
+      
+      
+      <div class="
+              col-lg-2 col-lg-offset-0
+              visible-lg-block
+              sidebar-container
+              catalog-container">
+        <div class="side-catalog">
+          <hr class="hidden-sm hidden-xs">
+          <h5>
+            <a class="catalog-toggle" href="#">CATALOG</a>
+          </h5>
+          <ul class="catalog-body"></ul>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</article>
+
+
+
+  
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p class="copyright text-muted">
+          Copyright &copy; Hc&#39;s Cabin 2023
+          <br>
+          Powered by <a href="https://gohugo.io">Hugo</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src=/js/jquery.min.js></script>
+<script src=/js/bootstrap.min.js crossorigin="anonymous"></script>
+
+
+
+<script src="/js/hux-blog.min.c4ea77041cd3edbfc8b2622cd887a9a5d8760a4162d14489e36d2a3fa4c90172.js"></script>
+
+
+<script src=/js/simple-jekyll-search.min.js></script>
+
+
+<script src="/js/search.min.53bce5da475b4d362500e5ce5dddfa22e20e1b9018777411d2020b4b839c9310.js"></script>
+
+
+
+
+
+
+<script type="text/javascript">
+  function generateCatalog(selector) {
+    _containerSelector = 'div.post-container'
+    
+    var P = $(_containerSelector), a, n, t, l, i, c;
+    a = P.find('h1,h2,h3,h4');
+    
+    $(selector).html('')
+    
+    a.each(function () {
+      n = $(this).prop('tagName').toLowerCase();
+      i = "#" + $(this).prop('id');
+      t = $(this).text();
+      c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+      l = $('<li class="' + n + '_nav"></li>').append(c);
+      $(selector).append(l);
+    });
+    return true;
+  }
+
+  generateCatalog(".catalog-body");
+
+  
+  $(".catalog-toggle").click((function (e) {
+    e.preventDefault();
+    $('.side-catalog').toggleClass("fold")
+  }))
+</script>
+
+
+<script type="text/javascript" src='/js/jquery.nav.min.ade6bde8f9fcc6a4b40852cb892e9f5912340ab8fe1305149d917fdd16fffd8d.js'></script>
+<script>
+   $(document).ready( function () {
+    $('.catalog-body').onePageNav({
+      currentClass: "active",
+      changeHash: !1,
+      easing: "swing",
+      filter: "",
+      scrollSpeed: 700,
+      scrollOffset: 0,
+      scrollThreshold: .2,
+      begin: null,
+      end: null,
+      scrollChange: null,
+      padding: 80
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+<script src="/zoomjs/zoom.min.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on Hc&#39;s Cabin</title>
+    <link>http://whc.one/categories/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on Hc&#39;s Cabin</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 26 Apr 2022 08:41:06 +0800</lastBuildDate><atom:link href="http://whc.one/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>水塘抽样算法（Reservior Sampling）</title>
+      <link>http://whc.one/posts/algorithm/reservior-sampling/</link>
+      <pubDate>Tue, 26 Apr 2022 08:41:06 +0800</pubDate>
+      
+      <guid>http://whc.one/posts/algorithm/reservior-sampling/</guid>
+      <description>给一个超大的文件，不可能一下子加载到内存中；文件说上存储着一系列的随机数字， 给定一个数，假定它必定存在与这些随机数字中，需要找到这个数的索引</description>
+    </item>
+    
+  </channel>
+</rss>
